@@ -9,8 +9,8 @@ Descripcion de fotos
     <div class="nav-wrapper" tabindex="0">
         <div>
             <ul>
-                <li tabindex="0"><a style="font-weight: bold;" onClick="this.href='/?texto='+document.getElementById('my-data').getAttribute('content')" > Descripción de fotos </a></li>
-                <li class="active" tabindex="1"><a style="font-weight: bold;"> Acerca de nosotros</a></li>
+                <li tabindex="0"><a tabindex="1" style="font-weight: bold;" onClick="this.href='/?texto='+document.getElementById('my-data').getAttribute('content')" > Descripción de fotos </a></li>
+                <li class="active" ><a tabindex="2" style="font-weight: bold;"> Acerca de nosotros</a></li>
             </ul>
         </div>
     </div>
@@ -42,9 +42,9 @@ Descripcion de fotos
         <main >
             <div id='deDiv' class="row" >
                 {% if tamanoTexto == 'noAgrandado' %}
-                <p style="font-size: 2.3em; text-align: center;" tabindex="2"> Somos dos estudiantes de Ingenieria de Sistemas de la Universidad Metropolitana, desarrollamos esta herramienta con la finalidad de brindarle una ayuda a las personas con discapacidad visual</p>
+                <p style="font-size: 2.3em; text-align: center;" tabindex="3"> Somos dos estudiantes de Ingenieria de Sistemas de la Universidad Metropolitana, desarrollamos esta herramienta con la finalidad de brindarle una ayuda a las personas con discapacidad visual</p>
                 {% else %}
-                <p style="font-size: 3.1em; text-align: center;" tabindex="2"> Somos dos estudiantes de Ingenieria de Sistemas de la Universidad Metropolitana, desarrollamos esta herramienta con la finalidad de brindarle una ayuda a las personas con discapacidad visual</p>
+                <p style="font-size: 3.1em; text-align: center;" tabindex="3"> Somos dos estudiantes de Ingenieria de Sistemas de la Universidad Metropolitana, desarrollamos esta herramienta con la finalidad de brindarle una ayuda a las personas con discapacidad visual</p>
                 {% endif %}
             </div>
         </main>

@@ -6,11 +6,11 @@ Descripcion de fotos
 
 {% block navbar %}
 <nav class="#006064 cyan darken-4" role="navigation">
-    <div class="nav-wrapper" tabindex="0">
+    <div class="nav-wrapper" >
         <div>
             <ul>
-                <li class="active"><a onClick="this.href='/?texto='+document.getElementById('elTextoaEnviar').value" style="font-weight: bold;"> Descripción de fotos </a></li>
-                <li><a onClick="this.href='/aboutus?texto='+document.getElementById('elTextoaEnviar').value" id="elLinkA" style="font-weight: bold;"> Acerca de nosotros</a></li>
+                <li class="active" ><a aria-label="Descripcion de fotos" tabindex="1" onClick="this.href='/?texto='+document.getElementById('elTextoaEnviar').value" style="font-weight: bold;"> Descripción de fotos </a></li>
+                <li ><a tabindex="2" aria-label="Acerca de nosotros" onClick="this.href='/aboutus?texto='+document.getElementById('elTextoaEnviar').value" id="elLinkA" style="font-weight: bold;"> Acerca de nosotros</a></li>
             </ul>
         </div>
     </div>
@@ -97,11 +97,11 @@ Descripcion de fotos
             <div id='deDiv' class="row" >
                 {% if description %}
                     {% if tamanoTexto == 'noAgrandado' %}
-                    <p tabindex="1" style="font-size: 2.3em; text-align: center;"> {{ description }}</p>
-                    <p tabindex="2" style="font-size: 2.3em; text-align: center;"> puedes ingresar otra foto </p>
+                    <p tabindex="3" style="font-size: 2.3em; text-align: center;"> {{ description }}</p>
+                    <p tabindex="4" style="font-size: 2.3em; text-align: center;"> puedes ingresar otra foto </p>
                     {% else %}
-                    <p tabindex="1" style="font-size: 3.1em; text-align: center;"> {{ description }}</p>
-                    <p tabindex="2" style="font-size: 3.1em; text-align: center;"> puedes ingresar otra foto </p>
+                    <p tabindex="3" style="font-size: 3.1em; text-align: center;"> {{ description }}</p>
+                    <p tabindex="4" style="font-size: 3.1em; text-align: center;"> puedes ingresar otra foto </p>
                     {% endif %}
                     <div style="text-align: center;">
                         <img src="static/uploadedImages/{{daFileName}}"
@@ -111,9 +111,9 @@ Descripcion de fotos
                 {% else %}
 
                 {% if tamanoTexto == 'noAgrandado' %}
-                <p tabindex="1" style="font-size: 2.3em"> Bienvenido, ingresa la foto que quieres describir. <span id='elSpan'>Presiona tab y enter</span></p>
+                <p tabindex="3" style="font-size: 2.3em"> Bienvenido, ingresa la foto que quieres describir. <span id='elSpan'>Presiona tab y enter</span></p>
                 {% else %}
-                <p tabindex="1" style="font-size: 3.1em"> Bienvenido, ingresa la foto que quieres describir. <span id='elSpan2'>Presiona tab y enter</span></p>
+                <p tabindex="3" style="font-size: 3.1em"> Bienvenido, ingresa la foto que quieres describir. <span id='elSpan2'>Presiona tab y enter</span></p>
                 {% endif %}
                 {% endif %}
             </div>
@@ -134,7 +134,7 @@ Descripcion de fotos
                     <div class="file-field input-field col s12" style="width:100%; height: 100%; position: relative;">
                         <div class="btn #006064 cyan darken-4 col s6 offset-s3">
                             <span style="font-weight: bold;">subir foto</span>
-                            <input type="file" id="elFile" name="elFile" tabindex="3" aria-label="boton para subir foto">
+                            <input type="file" id="elFile" name="elFile" tabindex="5" aria-label="boton para subir foto">
                         </div>
                       <!--  <div class="file-path-wrapper col s1">
                             <input class="file-path validate" type="text" name="filename" id="filename">
@@ -155,11 +155,11 @@ Descripcion de fotos
 
                     {% if tamanoTexto =='noAgrandado'%}
 
-                        <button class="btn #006064 cyan darken-4 col s6 offset-s3" id='hereItIsHere' tabindex="4" aria-label="boton para agrandar texto" class="btn #006064 cyan darken-4 col s4">
+                        <button class="btn #006064 cyan darken-4 col s6 offset-s3" id='hereItIsHere' tabindex="6" aria-label="boton para agrandar texto" class="btn #006064 cyan darken-4 col s4">
                             <span style="font-weight: bold;" id="eltexxt">Agrandar texto</span> 
                         </button>
                     {% else %}
-                        <button class="btn #006064 cyan darken-4 col s6 offset-s3" id='hereItIsHere' tabindex="4" aria-label="boton para disminuir texto" class="btn #006064 cyan darken-4 col s4">
+                        <button class="btn #006064 cyan darken-4 col s6 offset-s3" id='hereItIsHere' tabindex="6" aria-label="boton para disminuir texto" class="btn #006064 cyan darken-4 col s4">
                             <span style="font-weight: bold;" id="eltexxt">Disminuir texto</span> 
                         </button>
                     {% endif %}
