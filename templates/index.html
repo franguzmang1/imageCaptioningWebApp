@@ -1,0 +1,186 @@
+{% extends 'material/base.html' %}
+{% block title %} 
+Descripcion de fotos
+{% endblock title %}
+
+
+{% block navbar %}
+<nav class="#006064 cyan darken-4" role="navigation">
+    <div class="nav-wrapper" tabindex="0">
+        <div>
+            <ul>
+                <li class="active"><a onClick="this.href='/?texto='+document.getElementById('elTextoaEnviar').value" style="font-weight: bold;"> Descripción de fotos </a></li>
+                <li><a onClick="this.href='/aboutus?texto='+document.getElementById('elTextoaEnviar').value" id="elLinkA" style="font-weight: bold;"> Acerca de nosotros</a></li>
+            </ul>
+        </div>
+    </div>
+
+</nav>
+
+
+{% endblock navbar %}
+
+
+<style>
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+</style>
+
+
+
+{% block content %} 
+<!-- <audio id="theAudio" autoplay src="static/audio/{{ theAudioFile }}"></audio> -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+            <script type="text/javascript">
+                $(function(){
+                    $("#elFile").bind('change', function(){
+                        //hacer submit de form 'daForm'
+                        $("#daForm").submit()
+                    });
+                });
+                $(function(){
+                    $("#hereItIsHere").click(function(){
+                        //$("#eltexxt").text('hello world');
+                        
+                        if($("#elTextoaEnviar").val() === 'noAgrandado'){
+                            //$("#elTextoaEnviar").text('agrandado');
+                        $("#elTextoaEnviar").val('agrandado');
+                        $("#deDiv p").css({'font-size': '3.1em'});
+                        $("#eltexxt").text('Disminuir texto');
+                        } else {
+                            //$("#elTextoaEnviar").text('noAgrandado');
+                            $("#deDiv p").css({'font-size': '2.3em'});
+                            $("#eltexxt").text('Agrandar texto');
+                            $("#elTextoaEnviar").val('noAgrandado');
+                        }
+                    });
+                });
+
+
+                $(document).ready(function(){
+                    $('#elTextoaEnviar').hide();
+                    console.log('se esta en un telefono movil: ',window.mobileCheck());
+                    if(window.mobileCheck()){
+                        $('#elSpan').hide()
+                        $('#elSpan2').hide()
+                    }
+                })
+
+                window.mobileCheck = function() {
+  let check = false;
+  (function(a){if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4))) check = true;})(navigator.userAgent||navigator.vendor||window.opera);
+  return check;
+};
+
+</script>
+
+    <div class="container" > 
+        
+        <main >
+            <div id='deDiv' class="row" >
+                {% if description %}
+                    {% if tamanoTexto == 'noAgrandado' %}
+                    <p tabindex="1" style="font-size: 2.3em; text-align: center;"> {{ description }}</p>
+                    <p tabindex="2" style="font-size: 2.3em; text-align: center;"> puedes ingresar otra foto </p>
+                    {% else %}
+                    <p tabindex="1" style="font-size: 3.1em; text-align: center;"> {{ description }}</p>
+                    <p tabindex="2" style="font-size: 3.1em; text-align: center;"> puedes ingresar otra foto </p>
+                    {% endif %}
+                    <div style="text-align: center;">
+                        <img src="static/uploadedImages/{{daFileName}}"
+                        style="width: 200px; height:200px; display: inline-block;image-orientation: from-image;"
+                        onerror="this.onerror=null; this.src='static/uploadedImages/whiteImagePic.jpg'">
+                    </div>
+                {% else %}
+
+                {% if tamanoTexto == 'noAgrandado' %}
+                <p tabindex="1" style="font-size: 2.3em"> Bienvenido, ingresa la foto que quieres describir. <span id='elSpan'>Presiona tab y enter</span></p>
+                {% else %}
+                <p tabindex="1" style="font-size: 3.1em"> Bienvenido, ingresa la foto que quieres describir. <span id='elSpan2'>Presiona tab y enter</span></p>
+                {% endif %}
+                {% endif %}
+            </div>
+        </main>
+        <section>
+            <div class="row" ><!--landmark de subir fotos, ver como hacer que se nombre en narrator-->
+                
+                <form action="/upload" id="daForm" method="POST" class="col s12"
+                enctype="multipart/form-data">
+                <input type="text" name="elTexto" id="elTextoaEnviar" value={{tamanoTexto}} hidden></input>
+
+                    <!--<span class="btn btn-file">
+                        <i class="material-icons left">cloud_upload</i>
+                        Browse<input type="file">
+                    </span>
+                    -->
+                    <!-- quiero que una vez se suba la foto se haga submit de esta-->
+                    <div class="file-field input-field col s12" style="width:100%; height: 100%; position: relative;">
+                        <div class="btn #006064 cyan darken-4 col s6 offset-s3">
+                            <span style="font-weight: bold;">subir foto</span>
+                            <input type="file" id="elFile" name="elFile" tabindex="3" aria-label="boton para subir foto">
+                        </div>
+                      <!--  <div class="file-path-wrapper col s1">
+                            <input class="file-path validate" type="text" name="filename" id="filename">
+                        </div>
+                    -->
+                    </div>
+
+                <!-- <button type="submit" class="btn waves-effect waves-light">
+                        submit
+            
+                    </button>
+                    -->
+
+                </form>
+            </div>
+            <div class ="row">
+                <div class="col s12">
+
+                    {% if tamanoTexto =='noAgrandado'%}
+
+                        <button class="btn #006064 cyan darken-4 col s6 offset-s3" id='hereItIsHere' tabindex="4" aria-label="boton para agrandar texto" class="btn #006064 cyan darken-4 col s4">
+                            <span style="font-weight: bold;" id="eltexxt">Agrandar texto</span> 
+                        </button>
+                    {% else %}
+                        <button class="btn #006064 cyan darken-4 col s6 offset-s3" id='hereItIsHere' tabindex="4" aria-label="boton para disminuir texto" class="btn #006064 cyan darken-4 col s4">
+                            <span style="font-weight: bold;" id="eltexxt">Disminuir texto</span> 
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+
+        <!-- <div class="row">
+
+            <p id="elP"> La descripcion de la foto es: {{ description }}</p>
+        </div> -->
+<!-- 
+        <div class="row">
+            <img src="static/uploadedImages/{{daFileName}}"
+            style="width: 200px; height:200px;"
+            onerror="this.onerror=null; this.src='static/uploadedImages/whiteImagePic.jpg'">
+
+        </div> -->
+
+
+    </div>
+
+
+{% endblock content %}

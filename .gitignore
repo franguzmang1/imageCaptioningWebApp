@@ -1,0 +1,13 @@
+static/uploadedImages/*
+!static/uploadedImages/whiteImagePic.jpg
+
+env/
+__pycache__/
+
+theModel/
+
+static/audio/
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

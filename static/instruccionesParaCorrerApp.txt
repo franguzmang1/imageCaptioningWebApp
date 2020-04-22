@@ -1,0 +1,8 @@
+activar correr 'env\Scripts\activate'
+desactivar correr 'deactivate'
+
+luego para correr la app correr: python app.py
+
+
+
+https://dl.dropboxusercontent.com/s/8v30c2sbrdu7sbn/checkpoint_epoch21-step6471.pth.tar?dl=0
