@@ -13,28 +13,25 @@ class Encoder(nn.Module):
 	Encoder for the model with attention.
 
 	"""
-	def __init__(self):
+	def __init__(self, encoded_image_size=7):
 		super(Encoder, self).__init__()
 
-		#como se hizo antes
+		#como se hizo antes con arquitectura decoder encoder
 		#resnet = models.resnet50(pretrained=True)
 
-		resnet152 = models.resnet152(pretrained=False)
+		resnet152 = models.resnet152(pretrained=True)
 
+		self.adaptive_pool = nn.AdaptiveAvgPool2d((encoded_image_size, encoded_image_size))
 
 		for param in resnet152.parameters():
 			param.requires_grad_(False)
 
 
-		#se quitan las 2 ultimas capas de resnet50
 		modules2 = list(resnet152.children())[:-2]
 
 		self.resnet = nn.Sequential(*modules2)
 
 		self.entrenarResnet()
-		
-		#self.adaptive_pool = nn.AdaptiveAvgPool2d((encoded_image_size,encoded_image_size))
-
 
 	def entrenarResnet(self, entrenar=True):
 		#todos las capas exceptuando la primera capa que es la que obtiene features muy sencillos como
@@ -54,14 +51,11 @@ class Encoder(nn.Module):
 		result = self.resnet(images)#se pasa por resnet y se recibe 
 		#(batch_size,2048,7,7)
 
-		#esto antes se usaba, ahora no.
-		#result = self.adaptive_pool(result)#de 7,7 ahora a 14,14. se repiten valores
+		result = self.adaptive_pool(result)
 
 		result = result.permute(0,2,3,1)#en vez de tener tensor en (batch_size,2048,14,14)
 		#se pasa a tener shape (batch_size, 14, 14, 2048)
 
-		#quitando esto a ver si no afecta
-		#result = result.view(batch_size,-1,2048)
 
 		#se devuelven los resultados del encoding en shape
 		#(batch_size,196,2048)

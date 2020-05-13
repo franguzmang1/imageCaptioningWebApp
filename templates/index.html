@@ -117,56 +117,61 @@ Descripcion de fotos
                 {% endif %}
                 {% endif %}
             </div>
-        </main>
-        <section>
-            <div class="row" ><!--landmark de subir fotos, ver como hacer que se nombre en narrator-->
+
+            <section>
+                <div class="row" ><!--landmark de subir fotos, ver como hacer que se nombre en narrator-->
+                    
+                    <form action="/upload" id="daForm" method="POST" class="col s12"
+                    enctype="multipart/form-data">
+                    <input type="text" name="elTexto" id="elTextoaEnviar" value={{tamanoTexto}} hidden></input>
+    
+                        <!--<span class="btn btn-file">
+                            <i class="material-icons left">cloud_upload</i>
+                            Browse<input type="file">
+                        </span>
+                        -->
+                        <!-- quiero que una vez se suba la foto se haga submit de esta-->
+                        <div class="file-field input-field col s12" style="width:100%; height: 100%; position: relative;">
+                            <div class="btn #006064 cyan darken-4 col s6 offset-s3">
+                                <span style="font-weight: bold;">subir foto</span>
+                                <input type="file" id="elFile" name="elFile" tabindex="5" aria-label="boton para subir foto">
+                            </div>
+                          <!--  <div class="file-path-wrapper col s1">
+                                <input class="file-path validate" type="text" name="filename" id="filename">
+                            </div>
+                        -->
+                        </div>
+    
+                    <!-- <button type="submit" class="btn waves-effect waves-light">
+                            submit
                 
-                <form action="/upload" id="daForm" method="POST" class="col s12"
-                enctype="multipart/form-data">
-                <input type="text" name="elTexto" id="elTextoaEnviar" value={{tamanoTexto}} hidden></input>
-
-                    <!--<span class="btn btn-file">
-                        <i class="material-icons left">cloud_upload</i>
-                        Browse<input type="file">
-                    </span>
-                    -->
-                    <!-- quiero que una vez se suba la foto se haga submit de esta-->
-                    <div class="file-field input-field col s12" style="width:100%; height: 100%; position: relative;">
-                        <div class="btn #006064 cyan darken-4 col s6 offset-s3">
-                            <span style="font-weight: bold;">subir foto</span>
-                            <input type="file" id="elFile" name="elFile" tabindex="5" aria-label="boton para subir foto">
-                        </div>
-                      <!--  <div class="file-path-wrapper col s1">
-                            <input class="file-path validate" type="text" name="filename" id="filename">
-                        </div>
-                    -->
-                    </div>
-
-                <!-- <button type="submit" class="btn waves-effect waves-light">
-                        submit
-            
-                    </button>
-                    -->
-
-                </form>
-            </div>
-            <div class ="row">
-                <div class="col s12">
-
-                    {% if tamanoTexto =='noAgrandado'%}
-
-                        <button class="btn #006064 cyan darken-4 col s6 offset-s3" id='hereItIsHere' tabindex="6" aria-label="boton para agrandar texto" class="btn #006064 cyan darken-4 col s4">
-                            <span style="font-weight: bold;" id="eltexxt">Agrandar texto</span> 
                         </button>
-                    {% else %}
-                        <button class="btn #006064 cyan darken-4 col s6 offset-s3" id='hereItIsHere' tabindex="6" aria-label="boton para disminuir texto" class="btn #006064 cyan darken-4 col s4">
-                            <span style="font-weight: bold;" id="eltexxt">Disminuir texto</span> 
-                        </button>
-                    {% endif %}
+                        -->
+    
+                    </form>
                 </div>
-            </div>
-        </section>
+                <div class ="row">
+                    <div class="col s12">
+    
+                        {% if tamanoTexto =='noAgrandado'%}
+    
+                            <button class="btn #006064 cyan darken-4 col s6 offset-s3" id='hereItIsHere' tabindex="6" aria-label="boton para agrandar texto" class="btn #006064 cyan darken-4 col s4">
+                                <span style="font-weight: bold;" id="eltexxt">Agrandar texto</span> 
+                            </button>
+                        {% else %}
+                            <button class="btn #006064 cyan darken-4 col s6 offset-s3" id='hereItIsHere' tabindex="6" aria-label="boton para disminuir texto" class="btn #006064 cyan darken-4 col s4">
+                                <span style="font-weight: bold;" id="eltexxt">Disminuir texto</span> 
+                            </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </section>
 
+
+        </main>
+       
+       
+    
         <!-- <div class="row">
 
             <p id="elP"> La descripcion de la foto es: {{ description }}</p>
