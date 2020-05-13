@@ -47,7 +47,7 @@ end_word='<end>', unk_word='<unk>', vocab_from_file=True)
 from model2 import DecoderWithAttention, Encoder
 encoder = Encoder()
 decoder = DecoderWithAttention(attention_dim=512,embed_dim=512, decoder_dim=512, vocab_size=8855)
-checkpoint = torch.load('theModel/model4checkpoint_epoch21-step12942.pth.tar', map_location=torch.device('cpu'))
+checkpoint = torch.load('theModel/checkpoint_epoch23-step12942.pth.tar', map_location=torch.device('cpu'))
 encoder.load_state_dict(checkpoint['encoder_state_dict'])
 decoder.load_state_dict(checkpoint['decoder_state_dict'])
 encoder.eval()
