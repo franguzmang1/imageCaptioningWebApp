@@ -8,34 +8,6 @@ import math
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
-class Encoderantes(nn.Module):
-	"""
-	Encoder for the model with attention.
-
-	"""
-	def __init__(self):
-		super(Encoder, self).__init__()
-
-		#como se hizo antes con arquitectura decoder encoder
-		resnet = models.resnet50(pretrained=True)
-
-		#resnet152 = models.resnet152(pretrained=True)
-
-
-		for param in resnet.parameters():
-			param.requires_grad_(False)
-
-
-		#se quitan las 2 ultimas capas de resnet50
-		modules2 = list(resnet.children())[:-2]
-
-		self.resnet = nn.Sequential(*modules2)
-
-		self.entrenarResnet()
-		
-		#self.adaptive_pool = nn.AdaptiveAvgPool2d((encoded_image_size,encoded_image_size))
-
-
 class Encoder(nn.Module):
 	"""
 	Encoder for the model with attention.
@@ -79,7 +51,7 @@ class Encoder(nn.Module):
 		result = self.resnet(images)#se pasa por resnet y se recibe 
 		#(batch_size,2048,7,7)
 
-		#result = self.adaptive_pool(result)
+		result = self.adaptive_pool(result)
 
 		result = result.permute(0,2,3,1)#en vez de tener tensor en (batch_size,2048,14,14)
 		#se pasa a tener shape (batch_size, 14, 14, 2048)
@@ -88,6 +60,7 @@ class Encoder(nn.Module):
 		#se devuelven los resultados del encoding en shape
 		#(batch_size,196,2048)
 		return result
+
 
 
 
@@ -123,7 +96,6 @@ class EncoderCNN(nn.Module):
 		features = features.view(features.size(0), -1)
 		features = self.embed(features)
 		return features
-
 	
 
 class Attention(nn.Module):
@@ -153,28 +125,35 @@ class Attention(nn.Module):
 		#aqui se tieenn que incluir calculos con los batch_sizes 
 	def forward(self, encoder_out, decoder_hidden):
 		"""
-		encoder_out: caracteristicas de la imagen: (batch_size,49,2048)
-		decoder_hidden: estado oculto de la celda LSTMCell: (batch_size,512)
+		encoder_out: fetures of images in shape: (batch_size,196,2048)
+		decoder_hidden: hidden state of LSTMCell in shape: (batch_size,512)
 		"""
-		
+		#se pasa de shape (batch_size,196,2048) a (batch_size,196,512)
+		#los features se pasan de 2048 a 512 dimensiones
+		att1 = self.encoder_att(encoder_out)
 
-		att1 = self.encoder_att(encoder_out)#(batch_size, 49, 512)
+		att2 = self.decoder_att(decoder_hidden)
 
-		att2 = self.decoder_att(decoder_hidden)#(batch_size, 512)
+		#se suma lo que viene de encoder pasado por linear y en dimension 512
+		#con lo que veine del decoder_hidden
+		#a cada uno de los pixeles que tiene 512 dimensiones se le suma las 
+		#512 dimensiones de lo que viene de hidden state de decoder
+		#se obtiene shape (batch_size,196,512)
 
-		
-		#se suma cada parte de la foto con el estado oculto
-		sum1 = self.relu(att1 + att2.unsqueeze(1))#(batch_size, 49, 512)
+		#relu para aplicar sparcity
+		#los valores que esten en negativo pasan a ser 0
+		sum1 = self.relu(att1 + att2.unsqueeze(1))
 
-		
-		att = self.full_att(sum1).squeeze(2)#(batch_size, 49)
-	
+		#se pasa de (batch_size, 196, 512) a (batch_size, 196)
+		att = self.full_att(sum1).squeeze(2)#se tiene un score de importancia
+		#de cada uno de los 196 pixeles
 
-		alpha = self.softmax(att)#(batch_size, 49)
+		#se pasa a softmax
+		alpha = self.softmax(att)
 
-		#(batch_size, 49, 2048) * (batch_size, 49, 1) = (batch_size, 49, 2048)
-		attention_weighted_encoding = (encoder_out*alpha.unsqueeze(2)).sum(dim=1)#(batch_size, 2048)
-	
+		#se multiplica los features por alpha calculado (los pesos de los 196 pixeles)
+		attention_weighted_encoding = (encoder_out*alpha.unsqueeze(2)).sum(dim=1)
+		#shape resultante (batch_size,2048)
 
 
 		return attention_weighted_encoding, alpha
@@ -381,7 +360,7 @@ class DecoderWithAttention(nn.Module):
 		"""
 		Forward propagation.
 
-		:param encoder_out: encoded features. dimensions (batch_size,7,7,2048) 
+		:param encoder_out: encoded features. dimensions (batch_size,14,14,2048) 
 		:param encoded_captions: encoded captions, a tensor of dimension (batch_size, number of words)
 		(batch_size, max_caption_length)
 		"""
@@ -392,7 +371,7 @@ class DecoderWithAttention(nn.Module):
 
 
 		#flatten the image
-		encoder_out = encoder_out.view(batch_size, -1, encoder_dim)#shape will be (batch_size,49,2048)
+		encoder_out = encoder_out.view(batch_size, -1, encoder_dim)#shape will be (batch_size,196,2048)
 		num_pixels = encoder_out.size(1)
 
 		#se le quita la palabra <end> a los captions
@@ -419,6 +398,9 @@ class DecoderWithAttention(nn.Module):
 			#se envian los 64 image features y 64 hidden states en todas las iteraciones
 			attention_weighted_encoding, alpha = self.attention(encoder_out, h)
 
+			#se pasa hidden states por layer que lo pasa a dimension 2048
+			#se pasa los attention weights por un gate que tiene que ver con los 
+			#hidden state de la lstm
 			gate = self.sigmoid(self.f_beta(h))
 			attention_weighted_encoding = gate * attention_weighted_encoding
 

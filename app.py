@@ -25,6 +25,7 @@ import shutil
 #with open('theModel2/checkpoint_epoch21-step6471.pth.tar', 'b+w') as f:
 #    f.write(g.read())
 
+#1 o 2
 
 
 app = Flask(__name__)
@@ -34,8 +35,20 @@ db = SQLAlchemy(app)
 upload_folder = '/static/uploadedImages'
 app.config['upload_folder']=upload_folder
 allowed_extensions = {'png','jpg','jpeg'}
-vocab1 = Vocabulary(vocab_threshold=None,vocab_file='vocabulary/vocab.pkl', start_word='<start>',
-end_word='<end>', unk_word='<unk>', vocab_from_file=True)
+
+
+cualElegir =2
+if cualElegir ==1:
+    vocab1 = Vocabulary(vocab_threshold=None,vocab_file='vocabulary/vocab.pkl', start_word='<start>', end_word='<end>', unk_word='<unk>', vocab_from_file=True)
+    elvocab_size = 8855
+    textoCheckpoint = 'theModel/model4.2checkpoint_epoch23-step12942.pth.tar'
+else:
+    vocab1 = Vocabulary(vocab_threshold=None,vocab_file='vocabulary/nuevoVocab.pkl', start_word='<start>', end_word='<end>', unk_word='<unk>', vocab_from_file=True)
+    elvocab_size = 8857
+    textoCheckpoint = 'theModel/checkpoint_epoch34-step4500.pth.tar'
+
+#vocab1 = Vocabulary(vocab_threshold=None,vocab_file='vocabulary/vocab.pkl', start_word='<start>',
+#end_word='<end>', unk_word='<unk>', vocab_from_file=True)
 
 
 #asi funciona
@@ -43,13 +56,19 @@ end_word='<end>', unk_word='<unk>', vocab_from_file=True)
 #print(f)
 
 #print(os.getcwd())
-
-from model2 import DecoderWithAttention, Encoder
+#from modeloParaAgregar import DecoderWithAttention, Encoder
+if cualElegir ==1:
+    from model2 import DecoderWithAttention, Encoder
+else:
+    from modeloParaAgregar import DecoderWithAttention, Encoder
+#from modeloParaAgregar import DecoderWithAttention, Encoder
 encoder = Encoder()
-decoder = DecoderWithAttention(attention_dim=512,embed_dim=512, decoder_dim=512, vocab_size=8855)
-checkpoint = torch.load('theModel/model4checkpoint_epoch21-step12942.pth.tar', map_location=torch.device('cpu'))
+decoder = DecoderWithAttention(attention_dim=512,embed_dim=512, decoder_dim=512, vocab_size=elvocab_size)
+checkpoint = torch.load(textoCheckpoint, map_location=torch.device('cpu'))
 encoder.load_state_dict(checkpoint['encoder_state_dict'])
 decoder.load_state_dict(checkpoint['decoder_state_dict'])
+
+adaptive_pool = torch.nn.AdaptiveAvgPool2d((224, 224))
 encoder.eval()
 decoder.eval()
 
@@ -136,6 +155,7 @@ def get_image():
 
 def predictCaption(filename):
     result=transform_image(filename)
+    result = adaptive_pool(result)
     features = encoder(result)
     output = decoder.beamSearch(features)
     result2 = clean_sentence(output)

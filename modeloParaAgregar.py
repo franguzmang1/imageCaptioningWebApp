@@ -49,8 +49,6 @@ class Encoder(nn.Module):
 
 		resnet152 = models.resnet152(pretrained=True)
 
-		self.adaptive_pool = nn.AdaptiveAvgPool2d((encoded_image_size, encoded_image_size))
-
 		for param in resnet152.parameters():
 			param.requires_grad_(False)
 
@@ -78,8 +76,6 @@ class Encoder(nn.Module):
 		batch_size = images.size(0)
 		result = self.resnet(images)#se pasa por resnet y se recibe 
 		#(batch_size,2048,7,7)
-
-		#result = self.adaptive_pool(result)
 
 		result = result.permute(0,2,3,1)#en vez de tener tensor en (batch_size,2048,14,14)
 		#se pasa a tener shape (batch_size, 14, 14, 2048)
@@ -143,6 +139,15 @@ class Attention(nn.Module):
 		self.full_att = nn.Linear(attention_dim, 1)
 		self.relu = nn.ReLU()
 		self.softmax = nn.Softmax(dim=1)
+
+
+	def init_weights(self):
+		torch.nn.init.xavier_uniform_(self.encoder_att.weight)
+		torch.nn.init.xavier_uniform_(self.decoder_att.weight)
+		torch.nn.init.xavier_uniform_(self.full_att.weight)
+		self.encoder_att.bias.data.fill_(0)
+		self.decoder_att.bias.data.fill_(0)
+		self.full_att.bias.data.fill_(0)
 
 
 		#encoder_out recibe los features de la foto
@@ -225,8 +230,14 @@ class DecoderWithAttention(nn.Module):
 		Inicializando con Xavier Initialization
 		"""
 		torch.nn.init.xavier_uniform_(self.embedding.weight)
-		self.fc.bias.data.fill_(0)
+		torch.nn.init.xavier_uniform_(self.init_h.weight)
+		torch.nn.init.xavier_uniform_(self.init_c.weight)
+		torch.nn.init.xavier_uniform_(self.f_beta.weight)
 		torch.nn.init.xavier_uniform_(self.fc.weight)
+		self.init_h.bias.data.fill_(0)
+		self.init_c.bias.data.fill_(0)
+		self.f_beta.bias.data.fill_(0)
+		self.fc.bias.data.fill_(0)
 		
 
 
@@ -262,6 +273,7 @@ class DecoderWithAttention(nn.Module):
 			h, c = self.decode_step(torch.cat([inputs, awe], dim=1), (h,c))
 
 			preds = self.fc(h)
+
 			preds = F.log_softmax(preds, dim=1)
 
 			_, max_indice = torch.max(preds, dim=1)
@@ -277,7 +289,7 @@ class DecoderWithAttention(nn.Module):
 
 
 	def beamSearch(self, encoder_out):
-		vocab_size=8855
+		vocab_size=8857
 		k=10#beam size
 		encoder_out = encoder_out.view(1,-1,2048)
 		enc_image_size = int(math.sqrt(encoder_out.size(1)))
@@ -427,6 +439,9 @@ class DecoderWithAttention(nn.Module):
 			h, c = self.decode_step(torch.cat([embeddings[:,q,:], attention_weighted_encoding], dim=1), (h,c))
 			#se aplica dropout para que no se dependa siempre de las mismas neuronas
 			#se apagan algunas de las 512 dimensiones del hidden state, aplicando droput
+			
+
+
 			preds = self.fc(self.dropout(h))#se aplica tambien linear layer que pasa de 512 dimensiones 
 			# a vocab size dimensiones
 			predictions[:,q,:] = preds
