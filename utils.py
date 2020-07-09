@@ -1,3 +1,4 @@
+# Basado en: https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Image-Captioning (Recuperado en abril, 2020)
 import os
 import numpy as np
 import h5py
